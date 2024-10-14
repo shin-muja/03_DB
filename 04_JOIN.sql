@@ -60,7 +60,7 @@ FROM EMPLOYEE;
 -- 1) 연결에 사용할 두 컬럼명이 다른 경우
 
 -- ANSI
--- 연결에 사용할 컬럼명이 다른 경우 ON()을 사용
+-- 연결에 사용할 컬럼명이 다른 경우 ON()ㅕ을 사용
 SELECT EMP_ID, EMP_NAME, DEPT_CODE, DEPT_TITLE
 FROM EMPLOYEE
 JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID);
@@ -92,6 +92,8 @@ WHERE LOCATION_ID = LOCAL_CODE;
 
 -- ANSI
 -- 연결에 사용할 컬럼명이 같은 경우 USING(컬럼명)을 사용함
+-- 여러가지 요인에 의헤 실제 업무에서는 지양하는 편
+-- 외도록 같은 컬럼명이어도 ON을 사용하는것을 권장
 SELECT EMP_ID, EMP_NAME, JOB_CODE, JOB_NAME
 FROM EMPLOYEE
 JOIN JOB USING(JOB_CODE);
