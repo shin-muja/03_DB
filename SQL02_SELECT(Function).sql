@@ -80,14 +80,59 @@ GROUP BY TG.STUDENT_NO; -- 1개 행
  * 출력되도록 하시오
  */
 
+SELECT TS.DEPARTMENT_NO 학과번호, COUNT(*) "학생수(명)"
+FROM TB_STUDENT TS
+LEFT JOIN TB_DEPARTMENT TD ON(TS.DEPARTMENT_NO  = TD.DEPARTMENT_NO)
+GROUP BY TS.DEPARTMENT_NO
+ORDER BY 1; -- 62줄
 
+
+/* 11. 지도 교수를 배정받지 못한 학생의 수는 몇 명 정도 되는지 알아내기 */
+
+SELECT COUNT(*)
+FROM TB_STUDENT
+WHERE COACH_PROFESSOR_NO IS NULL;
+
+/* 12. 학번이 A112113인 김고운 학생의 년도 별 평점을 구하는 SQL문을 작성하시오.
+ * 단, 이때 출력화면의 헤더는 "년도", "년도 별 평점"이라고 찍히고 점수는 반올림하여
+ * 소수점 이하 한자리까지만 표시한다
+ */
+
+SELECT SUBSTR(TERM_NO, 1, 4) 년도, ROUND(AVG(POINT), 1) "년도 별 평점"
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY SUBSTR(TERM_NO, 1, 4)
+ORDER BY 1; -- 4줄
+
+/* 13. 학과 별 휴학생 수 를 파악하고자 한다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을 작성 */
+
+SELECT DEPARTMENT_NO "학과 번호", COUNT(DECODE(ABSENCE_YN, 'Y', 1)) "휴학생 수"
+FROM TB_STUDENT S
+GROUP BY DEPARTMENT_NO
+ORDER BY 1;
+
+/* 14. 춘 대학교에 다니는 동명이인 학생들의 이름을 찾는 쿼리 */
+
+SELECT STUDENT_NAME "동일이름", COUNT(*) "동명인 수"
+FROM TB_STUDENT
+GROUP BY STUDENT_NAME
+HAVING COUNT(*) > 1
+ORDER BY 1; 
+
+/* 학번이 A112113인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점, 총 청점을 구하는 SQL문 작성 */
+
+SELECT SUBSTR(TERM_NO, 1, 4), SUBSTR(TERM_NO, 5, 2), ROUND(AVG(POINT), 1 )
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY ROLLUP (SUBSTR(TERM_NO, 1, 4), SUBSTR(TERM_NO, 5, 2))
+ORDER BY 1;
 
 SELECT * FROM TB_DEPARTMENT;		-- 학과 TB_DEPARTMENT
 SELECT * FROM TB_STUDENT;			-- 학생 TB_STUDENT * 휴학생인 경우 ABSENCE_YN 이 ‘Y”
 SELECT * FROM TB_CLASS;				-- 과목 TB_CLASS
 SELECT * FROM TB_CLASS_PROFESSOR;	-- 과목 교수 TB_CLASS_PROFESSOR
 SELECT * FROM TB_PROFESSOR;			-- 교수 TB_PROFESSOR
-SELECT * FROM TB_GRADE;				-- 성적 TB_GRADE
+SELECT * FROM TB_GRADE;		-- 성적 TB_GRADE
 
 
 
